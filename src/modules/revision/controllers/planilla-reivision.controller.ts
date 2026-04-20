@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiOkResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 import { PlanillaRevisionService } from '../services/planilla-revision.service';
 import { PlanillaRevisionFilterDto } from '../dtos/planilla-revision-filter.dto';
 import { ApiPaginatedResponse } from '@/src/common/decorators/api-paginated-response.decorator';
@@ -44,8 +44,8 @@ export class PlanillaRevisionController {
 
     @Get(':id/detalle-completo')
   @ApiOperation({ summary: 'Obtener una planilla de revisión completa, consolidando datos técnicos, resultados y relaciones' })
-  @ApiResponse({ status: 200, description: 'Planilla retornada exitosamente.' })
-  @ApiResponse({ status: 404, description: 'Planilla no encontrada.' })
+  @ApiOkResponse({ description: 'Vehiculo encontrado', type: PlanillaRevisionDetalleCompletoResponse })
+  @ApiNotFoundResponse({ description: 'Planilla no encontrada.' })
   @ApiParam({ name: 'id', example: '15768131', description: 'id de la planilla de revisión' })
   getDetalleCompleto(@Param('id') id: string): Promise<PlanillaRevisionDetalleCompletoResponse>  {
     return this.planillaRevisionService.getDetalleCompleto(id);
