@@ -54,4 +54,29 @@ export class PlanillaRevisionService {
 
     return rta;
   }
+
+
+  async getDetalleCompleto(id: string) {
+    // 1. Casteamos a BigInt con seguridad
+    let bigIntId: bigint;
+    try {
+      bigIntId = BigInt(id);
+    } catch {
+      throw new NotFoundException(`El ID proporcionado no es válido.`);
+    }
+
+    // 2. Buscamos en la base de datos
+    const record = await this.planillaRevisionRepository.findDetalleById(bigIntId);
+
+    if (!record) {
+      throw new NotFoundException(`Planilla de revisión con ID ${id} no encontrada.`);
+    }
+
+    // 3. Transformamos usando el DTO que "aplana" los datos
+    const rta = plainToInstance(PlanillaRevisionDetalleDto, record, {
+      excludeExtraneousValues: true,
+    });
+
+    return rta;
+  }
 }

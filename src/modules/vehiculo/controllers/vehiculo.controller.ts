@@ -7,7 +7,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { VehiculoService } from '../services';
-import { VehiculoResponse } from '../dtos/vehiculo.response';
+import { VehiculoResponse } from '../dtos/vehiculo.response.dto';
 
 
 @ApiTags('Vehiculos')

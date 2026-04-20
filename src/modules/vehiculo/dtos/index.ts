@@ -1,1 +1,1 @@
-export * from './vehiculo.response';
+export * from './vehiculo.response.dto';
