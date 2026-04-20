@@ -1,3 +1,4 @@
+export * from './categoria-vehiculo';
 export * from './certificado';
 export * from './configuracion-ejes';
 export * from './localidad';

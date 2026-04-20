@@ -18,6 +18,7 @@ export class VehiculoRepository {
       },
       include: {
         tipo_vehiculo: true,
+        categoria_vehiculo: true,
         localidad: {
           include: {
             provincia: {
