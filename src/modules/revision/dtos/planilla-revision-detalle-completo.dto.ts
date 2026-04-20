@@ -1,3 +1,4 @@
+import { PlanillaRevision } from '@/src/model';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 
@@ -172,7 +173,7 @@ class AnomaliaDto {
   tipo: string;
 }
 
-export class PlanillaRevisionDetalleCompletoResponse {
+export class PlanillaRevisionDetalleCompletoDto {
   @ApiProperty({ type: PlanillaDto })
   @Expose()
   @Type(() => PlanillaDto)
@@ -225,4 +226,16 @@ export class PlanillaRevisionDetalleCompletoResponse {
   @Expose()
   @Type(() => AnomaliaDto)
   anomalias: AnomaliaDto[];
+
+
+  constructor(planillaRevision: PlanillaRevision) {
+    this.planilla = new PlanillaDto();
+    this.planilla.id = Number(planillaRevision.id);
+    this.planilla.numero = planillaRevision.numeroPlanilla;
+    this.planilla.fecha = planillaRevision.fecha.toISOString();
+    this.planilla.vencimiento = planillaRevision.vencimiento.toISOString();
+
+    // Aquí deberías mapear el resto de los campos anidados (vehiculo, titular, operador, taller, etc.)
+    // dependiendo de cómo estén estructurados en tu entidad PlanillaRevision y sus relaciones.
+  }
 }

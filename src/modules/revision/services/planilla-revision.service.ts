@@ -5,6 +5,7 @@ import { plainToInstance } from 'class-transformer';
 import { PlanillaRevisionResponseDto } from '../dtos/planilla-revision.dto';
 import { PlanillaRevisionDetalleDto } from '../dtos/planilla-revision-detalle.dto';
 import { PaginatedResponseDto } from '@/src/common/dtos/paginated-response.dto';
+import { PlanillaRevision } from '@/src/model';
 
 @Injectable()
 export class PlanillaRevisionService {
@@ -56,27 +57,37 @@ export class PlanillaRevisionService {
   }
 
 
-  async getDetalleCompleto(id: string) {
-    // 1. Casteamos a BigInt con seguridad
+    // async findByDominio(dominio: string): Promise<Vehiculo> {
+    //   const vehiculos = await this.repository.findByDominio(dominio);
+  
+    //   if (!vehiculos || vehiculos.length === 0) {
+    //     throw new NotFoundException(
+    //       `No se encontró el vehículo para el dominio informado ${dominio}`,
+    //     );
+    //   }
+  
+    //   return plainToInstance(Vehiculo, vehiculos[0], {
+    //     excludeExtraneousValues: true,
+    //   });
+    // }
+
+  async getDetalleCompleto(id: string): Promise<PlanillaRevision> {
+  
     let bigIntId: bigint;
     try {
       bigIntId = BigInt(id);
     } catch {
       throw new NotFoundException(`El ID proporcionado no es válido.`);
     }
-
-    // 2. Buscamos en la base de datos
-    const record = await this.planillaRevisionRepository.findDetalleById(bigIntId);
+  
+    const record = this.planillaRevisionRepository.findDetalleById(bigIntId).then((record) => {record});
 
     if (!record) {
       throw new NotFoundException(`Planilla de revisión con ID ${id} no encontrada.`);
     }
 
-    // 3. Transformamos usando el DTO que "aplana" los datos
-    const rta = plainToInstance(PlanillaRevisionDetalleDto, record, {
-      excludeExtraneousValues: true,
-    });
-
-    return rta;
+     return plainToInstance(PlanillaRevision, record, {
+        excludeExtraneousValues: true,
+      });
   }
 }

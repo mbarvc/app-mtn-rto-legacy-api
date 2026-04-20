@@ -114,7 +114,7 @@ export class ChasisResponse {
 // ─────────────────────────────────────────
 // Response principal
 // ─────────────────────────────────────────
-export class VehiculoResponse {
+export class VehiculoResponseDto {
   @Expose()
   @ApiProperty({
     description: 'Dominio (patente) del vehículo',
