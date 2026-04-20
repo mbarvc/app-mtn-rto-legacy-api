@@ -7,6 +7,7 @@ import { ModeloChasis } from "./modelo-chasis";
 import { TipoCajaVelocidad } from "./tipo-caja-velocidad";
 import { ConfiguracionEjes } from "./configuracion-ejes";
 import { TipoCarroceria } from "./tipo-carroceria";
+import { CategoriaVehiculo } from "./categoria-vehiculo";
 
 
 export class Vehiculo {
@@ -126,6 +127,22 @@ export class Vehiculo {
   })
   @Expose()
   tipoVehiculo: TipoVehiculo;
+
+
+  @ApiProperty({
+    description: 'Categoría del vehículo',
+    type: () => CategoriaVehiculo,
+  })
+  @Type(() => CategoriaVehiculo)
+  @Transform(({ obj, options }) => {
+    const raw = obj.categoriaVehiculo ?? obj.categoria_vehiculo;
+    if (!raw) return null;
+    return plainToInstance(CategoriaVehiculo, raw, {
+      excludeExtraneousValues: options.excludeExtraneousValues,
+    });
+  })
+  @Expose()
+  categoriaVehiculo!: CategoriaVehiculo;
 
   @ApiProperty({
     description: 'Localidad de radicación del vehículo',
