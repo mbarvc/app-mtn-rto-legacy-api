@@ -1,3 +1,4 @@
+export * from './certificado';
 export * from './configuracion-ejes';
 export * from './localidad';
 export * from './marca-chasis';
@@ -5,9 +6,11 @@ export * from './marca-motor';
 export * from './modelo-chasis';
 export * from './modelo-motor';
 export * from './pais';
+export * from './planilla-revision';
 export * from './provincia';
 export * from './tipo-caja-velocidad';
 export * from './tipo-carroceria';
 export * from './tipo-combustible';
+export * from './tipo-uso';
 export * from './tipo-vehiculo';
 export * from './vehiculo';
