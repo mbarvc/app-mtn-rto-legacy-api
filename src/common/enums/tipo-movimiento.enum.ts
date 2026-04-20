@@ -1,0 +1,6 @@
+export enum TipoMovimientoEnum {
+    ALTA = 'ALTA',
+    BAJA = 'BAJA',
+    TRANSFERENCIA = 'TRANSFERENCIA',
+    MODIFICACION_DATOS = 'MODIFICACIÓN DE DATOS',
+}

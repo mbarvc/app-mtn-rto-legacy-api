@@ -1,0 +1,3 @@
+export enum APP_ROLE {
+    USER_EMPRESA = "USER_PORTAL_EMPRESAS",
+}

@@ -1,0 +1,14 @@
+version: '3.5'
+services:
+  rto-legacy-api-dev:
+    container_name: rto-legacy-api-dev
+    restart: unless-stopped
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8077:4000"
+    env_file:
+      - ./dev.env
+    environment:
+      NODE_ENV: develop
