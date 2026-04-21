@@ -65,6 +65,31 @@ export class PlanillaRevision {
   @Transform(({ value }) => value?.toString())
   lineaInspeccionId?: string;
 
+
+  @ApiPropertyOptional({ description: 'ID del taller CNRT' })
+  @Expose({ name: 'cod_taller' })
+  codTaller?: number;
+
+  @ApiPropertyOptional({ description: 'ID del taller interno' })
+  @Expose({ name: 'taller_id' })
+  @Transform(({ value }) => value?.toString())
+  tallerId?: string;
+
+  @ApiProperty({ description: 'Resultado de la revisión (ID)' })
+  @Expose({ name: 'resultado_id' })
+  @Transform(({ value }) => value?.toString())
+  resultadoId: string;
+
+  @ApiPropertyOptional({ description: 'ID del convenio' })
+  @Expose({ name: 'convenio_id' })
+  @Transform(({ value }) => value?.toString())
+  convenioId?: string;
+
+  @ApiPropertyOptional({ description: 'ID de línea de inspección' })
+  @Expose({ name: 'linea_inspeccion_id' })
+  @Transform(({ value }) => value?.toString())
+  lineaInspeccionId?: string;
+
   @ApiPropertyOptional({ description: 'Fecha de vencimiento de la revisión' })
   @Expose({ name: 'vencimiento' })
   vencimiento?: Date;
