@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { PlanillaRevisionFilterDto } from '../dtos/planilla-revision-filter.dto';
+import { planilla_revision } from '@prisma/client';
 
 @Injectable()
 export class PlanillaRevisionRepository {
@@ -84,65 +85,56 @@ export class PlanillaRevisionRepository {
     };
   }
 
-  async findDetalleById(id: bigint){
+  async findDetalleById(id: bigint): Promise<planilla_revision | null> {
     return await this.prisma.planilla_revision.findUnique({
       where: { id },
-      select: {
-        id: true,
-        version: true,
-        nro_planilla: true,
-        dominio: true,
-        fecha: true,
-        vencimiento: true,
-        
-        // Relación Vehículo -> Año, Tipo y Categoría
+      include: {
         vehiculo: {
-          select: {
-            anio: true,
-            tipo_vehiculo: {
-              select: { tipo: true } // De rto_tipo_vehiculo
+          include: {
+            tipo_vehiculo: true,
+            categoria_vehiculo: true,
+            localidad: {
+              include: {
+                provincia: {
+                  include: {
+                    pais: true,
+                  },
+                },
+              },
             },
-            categoria_vehiculo: {
-              select: { categoria: true } // De categoria_vehiculo
-            }
-          }
+            modelo_motor: {
+              include: {
+                tipo_combustible: true,
+                marca_motor: true,
+              },
+            },
+            modelo_chasis: {
+              include: {
+                tipo_vehiculo: true,
+                marca_chasis: true,
+              },
+            },
+            tipo_caja_velocidad: true,
+            tipo_carroceria: true,
+            // tipo_de_tren: true,
+          },
         },
-
-        // Relaciones Directas
-        //Relacion convenio
-        convenio: {
-          select: { denominacion: true,
-             alcance_convenio: {
-              select: { alcance: true }
-             },
-             tipo_certificado: {
-              select: { descripcion: true }
-             }
-           }
+        pais: true,
+        localidad: {
+          include: {
+            provincia: {
+              include: {
+                pais: true,
+              },
+            },
+          },
         },
-        resultado: {
-          select: { texto: true }
-        },
-        tipo_uso: {
-          select: { abreviatura: true }
-        },
-        
-        // Taller
-        taller: {
-          select: { 
-            cod_taller: true, 
-            razon_social: true // Usamos razon_social ya que nombre_taller no está en el schema
-          }
-        },
-
-        // Certificado
-        certificado_planilla_revision_certificado_idTocertificado: {
-          select: {
-            serie: true,
-            numero: true
-          }
-        }
-      }
+        resultado: true,
+        taller: true,
+        tipo_uso: true,
+        linea_inspeccion: true,
+        convenio: true,
+      },
     });
   }
 }

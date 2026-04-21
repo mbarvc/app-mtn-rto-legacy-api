@@ -4,12 +4,14 @@ import { PlanillaRevisionService } from '../services/planilla-revision.service';
 import { PlanillaRevisionFilterDto } from '../dtos/planilla-revision-filter.dto';
 import { ApiPaginatedResponse } from '@/src/common/decorators/api-paginated-response.decorator';
 import { PlanillaRevisionResponseDto } from '../dtos/planilla-revision.dto';
-import { PlanillaRevisionDetalleCompletoDto } from '../dtos/planilla-revision-detalle-completo.dto';
+import { PlanillaRevisionDetalleCompletoDto } from '../dtos/planilla-revision-detalle-completo.response.dto';
 
 @ApiTags('Planilla Revision')
 @Controller('planillas-revision')
 export class PlanillaRevisionController {
-  constructor(private readonly planillaRevisionService: PlanillaRevisionService) {}
+  constructor(
+    private readonly planillaRevisionService: PlanillaRevisionService,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'Obtener todas las planillas de revisión' })
@@ -35,26 +37,35 @@ export class PlanillaRevisionController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Actualizar una planilla de revisión por ID' })
-  @ApiResponse({ status: 200, description: 'La planilla ha sido actualizada exitosamente.' })
+  @ApiResponse({
+    status: 200,
+    description: 'La planilla ha sido actualizada exitosamente.',
+  })
   @ApiResponse({ status: 404, description: 'Planilla no encontrada.' })
   update(@Param('id') id: string, @Body() updatePlanillaRevisionDto: any) {
     return this.planillaRevisionService.update(id, updatePlanillaRevisionDto);
   }
 
-
-    @Get(':id/detalle-completo')
-  @ApiOperation({ summary: 'Obtener una planilla de revisión completa, consolidando datos técnicos, resultados y relaciones' })
-  @ApiOkResponse({ description: 'Vehiculo encontrado', type: PlanillaRevisionDetalleCompletoDto })
+  @Get(':id/detalle-completo')
+  @ApiOperation({
+    summary:
+      'Obtener una planilla de revisión completa, consolidando datos técnicos, resultados y relaciones',
+  })
+  @ApiOkResponse({
+    description: 'Vehiculo encontrado',
+    type: PlanillaRevisionDetalleCompletoDto,
+  })
   @ApiNotFoundResponse({ description: 'Planilla no encontrada.' })
-  @ApiParam({ name: 'id', example: '15768131', description: 'id de la planilla de revisión' })
-  getDetalleCompleto(@Param('id') id: string): Promise<PlanillaRevisionDetalleCompletoDto>  {
-    return this.planillaRevisionService.getDetalleCompleto(id).then((planilla) => new PlanillaRevisionDetalleCompletoDto(planilla));
+  @ApiParam({
+    name: 'id',
+    example: '12345678',
+    description: 'id de la planilla de revisión',
+  })
+  getDetalleCompleto(
+    @Param('id') id: string,
+  ): Promise<PlanillaRevisionDetalleCompletoDto> {
+    return this.planillaRevisionService
+      .getDetalleCompleto(id)
+      .then((planilla) => new PlanillaRevisionDetalleCompletoDto(planilla));
   }
-
-    // findByDominio(@Query('dominio') dominio: string): Promise<VehiculoResponse> {
-    //   return this.vehiculoService
-    //     .findByDominio(dominio)
-    //     .then((vehiculo) => new VehiculoResponse(vehiculo));
-  
-    // }
 }

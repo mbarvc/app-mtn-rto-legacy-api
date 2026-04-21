@@ -56,21 +56,6 @@ export class PlanillaRevisionService {
     return rta;
   }
 
-
-    // async findByDominio(dominio: string): Promise<Vehiculo> {
-    //   const vehiculos = await this.repository.findByDominio(dominio);
-  
-    //   if (!vehiculos || vehiculos.length === 0) {
-    //     throw new NotFoundException(
-    //       `No se encontró el vehículo para el dominio informado ${dominio}`,
-    //     );
-    //   }
-  
-    //   return plainToInstance(Vehiculo, vehiculos[0], {
-    //     excludeExtraneousValues: true,
-    //   });
-    // }
-
   async getDetalleCompleto(id: string): Promise<PlanillaRevision> {
   
     let bigIntId: bigint;
@@ -80,7 +65,7 @@ export class PlanillaRevisionService {
       throw new NotFoundException(`El ID proporcionado no es válido.`);
     }
   
-    const record = this.planillaRevisionRepository.findDetalleById(bigIntId).then((record) => {record});
+    const record = await this.planillaRevisionRepository.findDetalleById(bigIntId);
 
     if (!record) {
       throw new NotFoundException(`Planilla de revisión con ID ${id} no encontrada.`);

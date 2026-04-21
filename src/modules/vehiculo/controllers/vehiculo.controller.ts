@@ -7,7 +7,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { VehiculoService } from '../services';
-import { VehiculoResponseDto } from '../dtos/vehiculo.response.dto';
+import {  VehiculoDto } from '../dtos/vehiculo.response.dto';
 
 
 @ApiTags('Vehiculos')
@@ -17,17 +17,21 @@ export class VehiculoController {
 
   @Get('/')
   @ApiOperation({ summary: 'Obtener un Vehiculo por dominio' })
-  @ApiOkResponse({ description: 'Vehiculo encontrado', type: VehiculoResponseDto })
+  @ApiOkResponse({
+    description: 'Vehiculo encontrado',
+    type: VehiculoDto,
+  })
   @ApiNotFoundResponse({ description: 'Vehiculo no encontrado' })
   @ApiQuery({
     name: 'dominio',
     example: 'AC167MK',
     description: 'Dominio del vehículo',
   })
-  findByDominio(@Query('dominio') dominio: string): Promise<VehiculoResponseDto> {
+  findByDominio(
+    @Query('dominio') dominio: string,
+  ): Promise<VehiculoDto> {
     return this.vehiculoService
       .findByDominio(dominio)
-      .then((vehiculo) => new VehiculoResponseDto(vehiculo));
-
+      .then((vehiculo) => new VehiculoDto(vehiculo));
   }
 }

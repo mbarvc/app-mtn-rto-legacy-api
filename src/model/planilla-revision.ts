@@ -1,207 +1,120 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Expose, plainToInstance, Transform, Type } from 'class-transformer';
-import { TipoUso } from './tipo-uso';
-import { Certificado } from './certificado';
+import { Expose, Transform, Type, plainToInstance } from 'class-transformer';
 import { Vehiculo } from './vehiculo';
 import { Pais } from './pais';
 import { Localidad } from './localidad';
 
 export class PlanillaRevision {
-  @ApiProperty({ example: '100293847', description: 'Identificador único de la planilla' })
+  @ApiProperty({ example: 1 })
   @Expose()
-  @Transform(({ value }) => value?.toString())
-  id: string;
+  id!: bigint;
 
-  @ApiPropertyOptional({ description: 'Versión de control de concurrencia' })
+  @ApiProperty({ example: 1 })
   @Expose()
-  @Transform(({ value }) => value?.toString())
-  version?: string;
+  version!: bigint;
 
-  @ApiProperty({ description: 'Dominio del vehículo inspeccionado' })
+  @ApiPropertyOptional({ example: 2.5 })
   @Expose()
-  dominio: string;
+  alto?: number;
 
-  @ApiProperty({ description: 'Fecha de creación de la revisión' })
+  @ApiPropertyOptional({ example: 2.2 })
   @Expose()
-  fecha: Date;
+  ancho?: number;
 
-  @ApiPropertyOptional({ description: 'Inicio de la revisión' })
-  @Expose({ name: 'inicio_revision' })
-  inicioRevision?: Date;
-
-  @ApiPropertyOptional({ description: 'Fin de la revisión' })
-  @Expose({ name: 'fin_revision' })
-  finRevision?: Date;
-
-  @ApiProperty({ description: 'Indica si el vehículo fue validado' })
-  @Expose({ name: 'vehiculo_validado' })
-  vehiculoValidado: boolean;
-
-  @ApiPropertyOptional({ description: 'Indica si la planilla fue impresa' })
+  @ApiPropertyOptional({ example: 10.5 })
   @Expose()
-  impresa?: boolean;
+  largo?: number;
 
-  @ApiPropertyOptional({ description: 'ID del taller CNRT' })
-  @Expose({ name: 'cod_taller' })
-  codTaller?: number;
+  @ApiProperty({ example: 'AB123CD' })
+  @Expose()
+  dominio!: string;
 
-  @ApiPropertyOptional({ description: 'ID del taller interno' })
-  @Expose({ name: 'taller_id' })
-  @Transform(({ value }) => value?.toString())
-  tallerId?: string;
+  @ApiProperty({ example: '2026-04-20T10:00:00.000Z' })
+  @Expose()
+  fecha!: Date;
 
-  @ApiProperty({ description: 'Resultado de la revisión (ID)' })
-  @Expose({ name: 'resultado_id' })
-  @Transform(({ value }) => value?.toString())
-  resultadoId: string;
+  @ApiProperty({ example: '2026-04-20T10:05:00.000Z' })
+  @Transform(({ obj }) => obj.inicioRevision ?? obj.inicio_revision)
+  @Expose()
+  inicioRevision!: Date;
 
-  @ApiPropertyOptional({ description: 'ID del convenio' })
-  @Expose({ name: 'convenio_id' })
-  @Transform(({ value }) => value?.toString())
-  convenioId?: string;
+  @ApiProperty({ example: '2026-04-20T10:45:00.000Z' })
+  @Transform(({ obj }) => obj.finRevision ?? obj.fin_revision)
+  @Expose()
+  finRevision!: Date;
 
-  @ApiPropertyOptional({ description: 'ID de línea de inspección' })
-  @Expose({ name: 'linea_inspeccion_id' })
-  @Transform(({ value }) => value?.toString())
-  lineaInspeccionId?: string;
+  @ApiProperty({ example: 12345 })
+  @Transform(({ obj }) => obj.nroPlanilla ?? obj.nro_planilla)
+  @Expose()
+  nroPlanilla!: number;
 
+  @ApiProperty({ example: true })
+  @Transform(({ obj }) => obj.vehiculoValidado ?? obj.vehiculo_validado)
+  @Expose()
+  vehiculoValidado!: boolean;
 
-  @ApiPropertyOptional({ description: 'ID del taller CNRT' })
-  @Expose({ name: 'cod_taller' })
-  codTaller?: number;
+  @ApiProperty({ example: true })
+  @Expose()
+  fotovalidada!: boolean;
 
-  @ApiPropertyOptional({ description: 'ID del taller interno' })
-  @Expose({ name: 'taller_id' })
-  @Transform(({ value }) => value?.toString())
-  tallerId?: string;
-
-  @ApiProperty({ description: 'Resultado de la revisión (ID)' })
-  @Expose({ name: 'resultado_id' })
-  @Transform(({ value }) => value?.toString())
-  resultadoId: string;
-
-  @ApiPropertyOptional({ description: 'ID del convenio' })
-  @Expose({ name: 'convenio_id' })
-  @Transform(({ value }) => value?.toString())
-  convenioId?: string;
-
-  @ApiPropertyOptional({ description: 'ID de línea de inspección' })
-  @Expose({ name: 'linea_inspeccion_id' })
-  @Transform(({ value }) => value?.toString())
-  lineaInspeccionId?: string;
-
-  @ApiPropertyOptional({ description: 'Fecha de vencimiento de la revisión' })
-  @Expose({ name: 'vencimiento' })
-  vencimiento?: Date;
-
-  @ApiProperty({ description: 'Número de planilla' })
-  @Expose({ name: 'nro_planilla' })
-  numeroPlanilla: number;
-
-  @ApiProperty({ description: 'ID del tipo de uso' })
-  @Expose({ name: 'tipo_uso_id' })
-  @Transform(({ value }) => value?.toString())
-  tipoUsoId: string;
-
-  @ApiPropertyOptional({ description: 'ID del vehículo asociado' })
-  @Expose({ name: 'vehiculo_id' })
-  @Transform(({ value }) => value?.toString())
-  vehiculoId?: string;
-
-  @ApiPropertyOptional({ description: 'ID del titular' })
-  @Expose({ name: 'titular_id' })
-  @Transform(({ value }) => value?.toString())
-  titularId?: string;
-
-  @ApiPropertyOptional({ description: 'ID del operador' })
-  @Expose({ name: 'operador_id' })
-  @Transform(({ value }) => value?.toString())
-  operadorId?: string;
-
-  @ApiPropertyOptional({ description: 'ID del inspector' })
-  @Expose({ name: 'inspector_id' })
-  @Transform(({ value }) => value?.toString())
-  inspectorId?: string;
-
-  @ApiPropertyOptional({ description: 'ID del director técnico' })
-  @Expose({ name: 'director_tecnico_id' })
-  @Transform(({ value }) => value?.toString())
-  directorTecnicoId?: string;
-
-  @ApiPropertyOptional({ description: 'ID de la localidad del titular' })
-  @Expose({ name: 'localidad_titular_id' })
-  @Transform(({ value }) => value?.toString())
-  localidadTitularId?: string;
-
-  @ApiPropertyOptional({ description: 'ID del país de radicación' })
-  @Expose({ name: 'pais_radicacion_id' })
-  @Transform(({ value }) => value?.toString())
-  paisRadicacionId?: string;
-
-  @ApiPropertyOptional({ description: 'Nombre del titular declarado' })
-  @Expose({ name: 'nombre_titular' })
-  nombreTitular?: string;
-
-  @ApiPropertyOptional({ description: 'Domicilio del titular declarado' })
-  @Expose({ name: 'domicilio_titular' })
-  domicilioTitular?: string;
-
-  @ApiPropertyOptional({ description: 'Observaciones de la revisión' })
+  @ApiPropertyOptional({ example: 'Observaciones varias' })
   @Expose()
   observaciones?: string;
 
-  @ApiPropertyOptional({ description: 'Constancia de validación' })
-  @Expose({ name: 'constancia_validacion' })
-  constanciaValidacion?: string;
-
-  @ApiPropertyOptional({ description: 'Fecha de validación' })
-  @Expose({ name: 'fecha_validacion' })
-  fechaValidacion?: Date;
-
-  @ApiPropertyOptional({ description: 'Última actualización de la planilla' })
-  @Expose({ name: 'last_updated' })
-  lastUpdated?: Date;
-
-  @ApiPropertyOptional({
-    description: 'ID del certificado asociado a la planilla de revisión',
-    example: 3,
-  })
-  @Transform(({ obj }) => obj.certificadoId ?? obj.certificado_id)
+  @ApiPropertyOptional({ example: 'Juan Pérez' })
+  @Transform(({ obj }) => obj.nombreTitular ?? obj.nombre_titular)
   @Expose()
-  @Transform(({ value }) => value?.toString())
-  certificadoId?: string;
+  nombreTitular?: string;
 
-  @ApiProperty({ name: 'resultado', description: 'Resultado textual de la revisión' })
-  @Expose({ name: 'resultado' })
-  @Transform(({ obj }) => obj.resultado?.texto)
-  resultado: string;
-
-  @ApiProperty({ name: 'tipoUso', description: 'Tipo de uso declarado para la planilla' })
-  @Expose({ name: 'tipo_uso' })
-  @Type(() => TipoUso)
-  tipoUso: TipoUso;
-
-  @ApiPropertyOptional({
-    description: 'Información del certificado asociado a la planilla de revisión',
-    type: () => Certificado,
-  })
-  @Transform(({ obj, options }) => {
-    const raw =
-      obj.certificado ??
-      obj.Certificado ??
-      obj.certificado_planilla_revision_certificado_idTocertificado;
-    if (!raw) return null;
-    return plainToInstance(Certificado, raw, {
-      excludeExtraneousValues: options.excludeExtraneousValues,
-    });
-  })
+  @ApiPropertyOptional({ example: 'Av. Siempre Viva 123' })
+  @Transform(({ obj }) => obj.domicilioTitular ?? obj.domicilio_titular)
   @Expose()
-  certificado?: Certificado;
+  domicilioTitular?: string;
 
-  @ApiPropertyOptional({
-    description: 'Información del vehículo asociado a la planilla de revisión',
-    type: () => Vehiculo,
-  })
+  @ApiPropertyOptional({ example: true })
+  @Expose()
+  reinspeccion?: boolean;
+
+  @ApiPropertyOptional({ example: '2026-05-20T00:00:00.000Z' })
+  @Expose()
+  vencimiento?: Date;
+
+  @ApiPropertyOptional({ example: 99 })
+  @Transform(({ obj }) => obj.vehiculoId ?? obj.vehiculo_id)
+  @Expose()
+  vehiculoId?: bigint;
+
+  @ApiPropertyOptional({ example: 1 })
+  @Transform(({ obj }) => obj.paisRadicacionId ?? obj.pais_radicacion_id)
+  @Expose()
+  paisRadicacionId!: bigint;
+
+  @ApiPropertyOptional({ example: 20 })
+  @Transform(({ obj }) => obj.localidadTitularId ?? obj.localidad_titular_id)
+  @Expose()
+  localidadTitularId?: bigint;
+
+  @ApiPropertyOptional({ example: 30 })
+  @Transform(({ obj }) => obj.resultadoId ?? obj.resultado_id)
+  @Expose()
+  resultadoId!: bigint;
+
+  @ApiPropertyOptional({ example: 40 })
+  @Transform(({ obj }) => obj.tallerId ?? obj.taller_id)
+  @Expose()
+  tallerId!: bigint;
+
+  @ApiPropertyOptional({ example: 50 })
+  @Transform(({ obj }) => obj.tipoUsoId ?? obj.tipo_uso_id)
+  @Expose()
+  tipoUsoId!: bigint;
+
+  @ApiPropertyOptional({ example: 60 })
+  @Transform(({ obj }) => obj.lineaInspeccionId ?? obj.linea_inspeccion_id)
+  @Expose()
+  lineaInspeccionId!: bigint;
+
+  @ApiPropertyOptional({ type: () => Vehiculo })
   @Type(() => Vehiculo)
   @Transform(({ obj, options }) => {
     const raw = obj.vehiculo;
@@ -213,28 +126,10 @@ export class PlanillaRevision {
   @Expose()
   vehiculo?: Vehiculo;
 
-  @ApiPropertyOptional({
-    description: 'Información de la localidad del titular asociada a la planilla',
-    type: () => Localidad,
-  })
-  @Type(() => Localidad)
-  @Transform(({ obj, options }) => {
-    const raw = obj.localidadTitular ?? obj.localidad;
-    if (!raw) return null;
-    return plainToInstance(Localidad, raw, {
-      excludeExtraneousValues: options.excludeExtraneousValues,
-    });
-  })
-  @Expose()
-  localidadTitular?: Localidad;
-
-  @ApiPropertyOptional({
-    description: 'Información del país de radicación asociado a la planilla',
-    type: () => Pais,
-  })
+  @ApiPropertyOptional({ type: () => Pais })
   @Type(() => Pais)
   @Transform(({ obj, options }) => {
-    const raw = obj.paisRadicacion ?? obj.pais;
+    const raw = obj.pais;
     if (!raw) return null;
     return plainToInstance(Pais, raw, {
       excludeExtraneousValues: options.excludeExtraneousValues,
@@ -242,4 +137,16 @@ export class PlanillaRevision {
   })
   @Expose()
   paisRadicacion?: Pais;
+
+  @ApiPropertyOptional({ type: () => Localidad })
+  @Type(() => Localidad)
+  @Transform(({ obj, options }) => {
+    const raw = obj.localidad;
+    if (!raw) return null;
+    return plainToInstance(Localidad, raw, {
+      excludeExtraneousValues: options.excludeExtraneousValues,
+    });
+  })
+  @Expose()
+  localidadTitular?: Localidad;
 }

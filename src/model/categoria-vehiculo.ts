@@ -2,7 +2,10 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 
 export class CategoriaVehiculo {
-  @ApiProperty({ description: 'Identificador único de la categoría', example: 1 })
+  @ApiProperty({
+    description: 'Identificador único de la categoría',
+    example: 1,
+  })
   @Expose()
   id!: bigint;
 

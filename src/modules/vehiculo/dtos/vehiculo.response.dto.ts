@@ -5,7 +5,7 @@ import { Expose, Type } from 'class-transformer';
 // ─────────────────────────────────────────
 // Radicacion
 // ─────────────────────────────────────────
-export class RadicacionResponse {
+export class RadicacionDto {
   @Expose()
   @ApiProperty({
     description: 'País de radicación del vehículo',
@@ -31,7 +31,7 @@ export class RadicacionResponse {
 // ─────────────────────────────────────────
 // Vehiculo (datos generales)
 // ─────────────────────────────────────────
-export class VehiculoDetalleResponse {
+export class VehiculoDetalleDto {
   @Expose()
   @ApiProperty({ description: 'Tipo de vehículo', example: 'Camioneta' })
   tipoVehiculo: string = '';
@@ -46,16 +46,16 @@ export class VehiculoDetalleResponse {
   @Expose()
   @ApiProperty({
     description: 'Datos de radicación del vehículo',
-    type: () => RadicacionResponse,
+    type: () => RadicacionDto,
   })
-  @Type(() => RadicacionResponse)
-  radicacion: RadicacionResponse = new RadicacionResponse();
+  @Type(() => RadicacionDto)
+  radicacion: RadicacionDto = new RadicacionDto();
 }
 
 // ─────────────────────────────────────────
 // Motor
 // ─────────────────────────────────────────
-export class MotorResponse {
+export class MotorDto {
   @Expose()
   @ApiProperty({
     description: 'Tipo de combustible del motor',
@@ -79,7 +79,7 @@ export class MotorResponse {
 // ─────────────────────────────────────────
 // Chasis
 // ─────────────────────────────────────────
-export class ChasisResponse {
+export class ChasisDto {
   @Expose()
   @ApiProperty({ description: 'Marca del chasis', example: 'FORD' })
   marcaChasis: string = '';
@@ -112,9 +112,9 @@ export class ChasisResponse {
 }
 
 // ─────────────────────────────────────────
-// Response principal
+// Dto principal
 // ─────────────────────────────────────────
-export class VehiculoResponseDto {
+export class VehiculoDto {
   @Expose()
   @ApiProperty({
     description: 'Dominio (patente) del vehículo',
@@ -125,28 +125,28 @@ export class VehiculoResponseDto {
   @Expose()
   @ApiProperty({
     description: 'Datos generales del vehículo',
-    type: () => VehiculoDetalleResponse,
+    type: () => VehiculoDetalleDto,
   })
-  @Type(() => VehiculoDetalleResponse)
-  vehiculo: VehiculoDetalleResponse = new VehiculoDetalleResponse();
+  @Type(() => VehiculoDetalleDto)
+  vehiculo: VehiculoDetalleDto = new VehiculoDetalleDto();
 
   @Expose()
-  @ApiProperty({ description: 'Datos del motor', type: () => MotorResponse })
-  @Type(() => MotorResponse)
-  motor: MotorResponse = new MotorResponse();
+  @ApiProperty({ description: 'Datos del motor', type: () => MotorDto })
+  @Type(() => MotorDto)
+  motor: MotorDto = new MotorDto();
 
   @Expose()
-  @ApiProperty({ description: 'Datos del chasis', type: () => ChasisResponse })
-  @Type(() => ChasisResponse)
-  chasis: ChasisResponse = new ChasisResponse();
+  @ApiProperty({ description: 'Datos del chasis', type: () => ChasisDto })
+  @Type(() => ChasisDto)
+  chasis: ChasisDto = new ChasisDto();
 
   constructor(vehiculo: Vehiculo) {
     this.dominio = vehiculo.dominio ?? '';
 
-    this.vehiculo = new VehiculoDetalleResponse();
+    this.vehiculo = new VehiculoDetalleDto();
     this.vehiculo.tipoVehiculo = vehiculo.tipoVehiculo?.tipo ?? '';
     this.vehiculo.anio = vehiculo.anio ?? 0;
-    this.vehiculo.radicacion = new RadicacionResponse();
+    this.vehiculo.radicacion = new RadicacionDto();
     this.vehiculo.radicacion.pais =
       vehiculo.localidadRadicacion?.provincia?.pais?.nombre ?? '';
     this.vehiculo.radicacion.provincia =
@@ -154,14 +154,14 @@ export class VehiculoResponseDto {
     this.vehiculo.radicacion.localidad =
       vehiculo.localidadRadicacion?.nombre ?? '';
 
-    this.motor = new MotorResponse();
+    this.motor = new MotorDto();
     this.motor.tipoCombustible =
       vehiculo.modeloMotor?.tipoCombustible?.tipo ?? '';
     this.motor.marcaMotor = vehiculo.modeloMotor?.marcaMotor?.marca ?? '';
     this.motor.tipoCajaVelocidad = vehiculo.tipoCajaVelocidad?.tipo ?? '';
     this.motor.nroMotor = vehiculo.nroMotor ?? '';
 
-    this.chasis = new ChasisResponse();
+    this.chasis = new ChasisDto();
     this.chasis.marcaChasis = vehiculo.modeloChasis?.marcaChasis?.marca ?? '';
     this.chasis.modeloChasis = vehiculo.modeloChasis?.modelo ?? '';
     this.chasis.numero = vehiculo.nroChasis ?? '';
